@@ -9,7 +9,7 @@ export const handler = awslambda.streamifyResponse(
             stream.on("readable", () => {
                 let chunk;
                 while (null !== (chunk = stream.read())) {
-                    parseDecoded({ chunk, responseStream });
+                    parseChunk({ chunk, responseStream });
                 }
             });
             stream.on("end", () => {
@@ -37,7 +37,7 @@ async function fetchStream(data) {
     return response.body;
 }
 
-function parseDecoded({ chunk, responseStream }) {
+function parseChunk({ chunk, responseStream }) {
     const data = ("" + chunk)
         .split("data:")
         .map((line) => {
